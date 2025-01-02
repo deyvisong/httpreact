@@ -29,7 +29,6 @@ function App() {
       name,
       price: parseFloat(price),
     };
-    console.log(product);
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -37,6 +36,12 @@ function App() {
       },
       body: JSON.stringify(product),
     });
+    const addedProduct = await res.json();
+
+    // 3 - Dynamic loading
+    setProducts((prevProducts) => [...prevProducts, addedProduct]);
+    setName("");
+    setPrice("");
   };
 
   return (

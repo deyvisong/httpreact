@@ -29,6 +29,16 @@
       "id": "729c",
       "name": "Cap",
       "price": 25
+    },
+    {
+      "id": "5435",
+      "name": "Jeans",
+      "price": 80
+    },
+    {
+      "id": "80d4",
+      "name": "Socks",
+      "price": 15
     }
   ]
 }
