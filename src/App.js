@@ -10,7 +10,7 @@ function App() {
   const [products, setProducts] = useState([]);
 
   // 4 - custom hook
-  const { data: items } = useFetch(url);
+  const { data: items, httpConfig, loading, error } = useFetch(url);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -37,29 +37,41 @@ function App() {
       name,
       price: parseFloat(price),
     };
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(product),
-    });
-    const addedProduct = await res.json();
+    // const res = await fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(product),
+    // });
+    // const addedProduct = await res.json();
 
-    // 3 - Dynamic loading
-    setProducts((prevProducts) => [...prevProducts, addedProduct]);
+    // // 3 - Dynamic loading
+    // setProducts((prevProducts) => [...prevProducts, addedProduct]);
+
+    // 5 - refactor post
+
+    httpConfig(product, "POST");
     setName("");
     setPrice("");
   };
-
+  // 8 - challenge 6
+  const handleDelete = (id) => {
+    httpConfig(id, "DELETE");
+  };
   return (
     <div className="App">
       <h1>Product List</h1>
+      {/* 6 - loading */}
+      {loading && <p>Loading data...</p>}
+      {error}
+      <p>{error}</p>
       <ul>
         {items &&
           items.map((product) => (
             <li key={product.id}>
               {product.name} - $: {product.price}
+              <button onClick={() => handleDelete(product.id)}>delete</button>
             </li>
           ))}
       </ul>
@@ -83,7 +95,9 @@ function App() {
               onChange={(e) => setPrice(e.target.value)}
             />
           </label>
-          <input type="submit" value="create" />
+          {/* 7 - loading state in post */}
+          {loading && <input type="submit" disabled value="Wait" />}
+          {!loading && <input type="submit" value="Create" />}
         </form>
       </div>
     </div>
